@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Habit } from "src/habit/habit.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "user" })
 export class User {
@@ -7,4 +8,7 @@ export class User {
 
     @Column()
     name: string;
+
+    @OneToMany(() => Habit, (habit) => habit.user)
+    habits: Habit[];
 }
