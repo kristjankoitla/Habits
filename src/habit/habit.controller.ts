@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Param } from "@nestjs/common";
+import { EntryService } from "src/entry/entry.service";
 import { Habit } from "./habit.entity";
 import { HabitService } from "./habit.service";
 
 @Controller("habits")
 export class HabitController {
-    constructor(private readonly habitService: HabitService) {}
+    constructor(private readonly habitService: HabitService, private readonly entryService: EntryService) {}
 
     @Get()
     getHabits() {
@@ -16,18 +17,8 @@ export class HabitController {
         this.habitService.create(habit);
     }
 
-    @Post(":habitId/entries")
-    createEntry(@Param('habitId') habitId: number) {
-        // create entry
-    }
-
-    @Get(":habitId/entries")
-    getEntries(@Param('habitId') habitId: number) {
-        // get all entries
-    }
-
-    @Delete(":habitId/entries/:entryId")
-    deleteEntry(@Param('habitId') habitId: number, @Param('entryId') entryId: number) {
-        // delete entry
+    @Get()
+    getEntries(@Param(":habitId/entries") habitId: number) {
+        return this.entryService.getByHabitId(habitId);
     }
 }
