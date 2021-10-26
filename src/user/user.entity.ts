@@ -8,6 +8,14 @@ export class User {
 
     @Column()
     name: string;
+    
+    @Column()
+    // todo maybe unique?
+    username: string;
+
+    @Column()
+    // todo important has to be encrypted
+    password: string;
 
     @OneToMany(() => Habit, (habit) => habit.user)
     habits: Habit[];

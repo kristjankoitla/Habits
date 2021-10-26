@@ -13,6 +13,15 @@ export class UserService {
         return this.userRepository.find();
     }
 
+    getByUsername(username: string) {
+        // todo findOne currently finds by field which does not have to be unique
+        return this.userRepository.findOne({ where: { username: username } });
+    }
+
+    getById(id: number) {
+        return this.userRepository.findOne({ where: { id: id }});
+    }
+
     create(user: User) {
         this.userRepository.save(user);
     }

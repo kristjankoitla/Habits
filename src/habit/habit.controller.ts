@@ -1,11 +1,23 @@
-import { Controller, Get, Post, Body, Param } from "@nestjs/common";
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Param,
+    UseGuards,
+    Request,
+} from "@nestjs/common";
+import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
 import { EntryService } from "src/entry/entry.service";
-import { Habit } from "./habit.entity";
+import { HabitRequest } from "./habit.entity";
 import { HabitService } from "./habit.service";
 
 @Controller("habits")
 export class HabitController {
-    constructor(private readonly habitService: HabitService, private readonly entryService: EntryService) {}
+    constructor(
+        private readonly habitService: HabitService,
+        private readonly entryService: EntryService,
+    ) {}
 
     @Get()
     getHabits() {
@@ -13,12 +25,17 @@ export class HabitController {
     }
 
     @Post()
-    createHabit(@Body() habit: Habit) {
-        this.habitService.create(habit);
+    @UseGuards(JwtAuthGuard)
+    createHabit(@Request() req, @Body() habitRequest: HabitRequest) {        
+        if (req.user.userId !== habitRequest.userId) {
+            return "unauthorized";
+        }
+
+        return this.habitService.create(habitRequest);
     }
 
     @Get()
     getEntries(@Param(":habitId/entries") habitId: number) {
-        return this.entryService.getByHabitId(habitId);
+        this.entryService.getByHabitId(habitId);
     }
 }

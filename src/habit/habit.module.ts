@@ -5,8 +5,9 @@ import { Connection } from "typeorm";
 import { HabitController } from "./habit.controller";
 import { Habit } from "./habit.entity";
 import { HabitService } from "./habit.service";
+import { userProviders } from "src/user/user.module";
 
-const userProviders = [
+const habitProviders = [
     {
         provide: "HABIT_REPOSITORY",
         useFactory: (connection: Connection) => connection.getRepository(Habit),
@@ -17,6 +18,6 @@ const userProviders = [
 @Module({
     imports: [DatabaseModule, EntryModule],
     controllers: [HabitController],
-    providers: [...userProviders, HabitService],
+    providers: [...habitProviders, ...userProviders, HabitService],
 })
 export class HabitModule {}

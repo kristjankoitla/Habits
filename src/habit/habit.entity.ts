@@ -16,3 +16,8 @@ export class Habit {
     @OneToMany(() => Entry, (entry) => entry.habit)
     entries: Entry[];
 }
+
+export interface HabitRequest {
+    name: string;
+    userId: number;
+}
