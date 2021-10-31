@@ -14,7 +14,6 @@ export class User {
     username: string;
 
     @Column()
-    // todo important has to be encrypted
     password: string;
 
     @OneToMany(() => Habit, (habit) => habit.user)
