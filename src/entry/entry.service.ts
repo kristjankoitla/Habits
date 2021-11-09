@@ -1,5 +1,6 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { Repository } from "typeorm";
+import { CreateEntryDto } from "./entry.dto";
 import { Entry } from "./entry.entity";
 
 @Injectable()
@@ -13,8 +14,9 @@ export class EntryService {
         return this.entryRepository.find({ where: { id: habitId } });
     }
 
-    create(entry: Entry) {
-        this.entryRepository.save(entry);
+    create(createEntryDto: CreateEntryDto) {
+        // Create entry from dto
+        // this.entryRepository.save(entry);
     }
 
     delete(id: number) {

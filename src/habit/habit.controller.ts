@@ -6,12 +6,15 @@ import {
     Param,
     UseGuards,
     Request,
+    ParseIntPipe,
 } from "@nestjs/common";
-import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { JwtAuthGuard } from "src/auth/strategy/jwt-auth.guard";
 import { EntryService } from "src/entry/entry.service";
-import { HabitRequest } from "./habit.entity";
+import { CreateHabitDto } from "./habit.dto";
 import { HabitService } from "./habit.service";
 
+@ApiTags("habits")
 @Controller("habits")
 export class HabitController {
     constructor(
@@ -20,22 +23,34 @@ export class HabitController {
     ) {}
 
     @Get()
-    getHabits() {
-        return this.habitService.getAll();
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    getHabits(@Request() req) {
+        return this.habitService.getByUserId(req.user.userId);
     }
 
     @Post()
+    @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    createHabit(@Request() req, @Body() habitRequest: HabitRequest) {        
-        if (req.user.userId !== habitRequest.userId) {
+    createHabit(@Request() req, @Body() createHabitDto: CreateHabitDto) {
+        if (req.user.userId !== createHabitDto.userId) {
+            // Handle unauthorized requests like a normal human being and
+            // use exceptions or a dedicated error handler.
             return "unauthorized";
         }
 
-        return this.habitService.create(habitRequest);
+        // Should this even return an id?
+        // Maybe the habit name should be unique (per user).
+        return this.habitService.create(createHabitDto);
     }
 
-    @Get()
-    getEntries(@Param(":habitId/entries") habitId: number) {
-        this.entryService.getByHabitId(habitId);
+    @Get(":habitId/entries")
+    getEntries(@Param("habitId", new ParseIntPipe()) habitId: number) {
+        // Does this return a habit object inside the entry object?
+        // If so, a dto is definitely needed. How and when (where) to
+        // convert the entry object into a entry dto?
+
+        // should also check if requester has permission
+        return this.entryService.getByHabitId(habitId);
     }
 }

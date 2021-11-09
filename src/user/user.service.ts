@@ -1,8 +1,8 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { User } from "./user.entity";
-import { hashSync } from "bcrypt"
-
+import { hashSync } from "bcrypt";
+import { CreateUserDto } from "./user.dto";
 
 @Injectable()
 export class UserService {
@@ -11,22 +11,18 @@ export class UserService {
         private userRepository: Repository<User>,
     ) {}
 
-    getAll(): Promise<User[]> {
-        return this.userRepository.find();
-    }
-
     getByUsername(username: string) {
         // todo findOne currently finds by field which does not have to be unique
         return this.userRepository.findOne({ where: { username: username } });
     }
 
-    getById(id: number) {
-        return this.userRepository.findOne({ where: { id: id }});
-    }
+    create(createUserDto: CreateUserDto) {
+        // todo handle unique duplicate errors/cases somehow
+        let user = new User();
+        user.name = createUserDto.name;
+        user.username = createUserDto.username;
+        user.password = hashSync(createUserDto.password, 10);
 
-    create(user: User) {
-        console.log(user);
-        user.password = hashSync(user.password, 10);
         this.userRepository.save(user);
     }
 }

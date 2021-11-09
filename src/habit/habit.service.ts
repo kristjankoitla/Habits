@@ -1,7 +1,8 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { User } from "src/user/user.entity";
 import { Repository } from "typeorm";
-import { Habit, HabitRequest } from "./habit.entity";
+import { CreateHabitDto } from "./habit.dto";
+import { Habit } from "./habit.entity";
 
 @Injectable()
 export class HabitService {
@@ -12,24 +13,26 @@ export class HabitService {
         private userRepository: Repository<User>,
     ) {}
 
-    getAll(): Promise<Habit[]> {
-        return this.habitRepository.find();
+    getByUserId(userId: number) {
+        // todo fix
+        return this.habitRepository.find({ where: { userId: userId } });
     }
 
-    create(habitRequest: HabitRequest) {     
+    create(createHabitDto: CreateHabitDto) {
         return this.userRepository
             .findOne({
-                where: { id: habitRequest.userId },
+                // there probably shouldn't be a db query if we already know the id of userID
+                where: { id: createHabitDto.userId },
             })
             .then((user) => {
                 let habit = new Habit();
-                habit.name = habitRequest.name;
+                habit.name = createHabitDto.name;
                 habit.user = user;
                 return habit;
             })
-            .then(habit => {
+            .then((habit) => {
                 return this.habitRepository.save(habit);
             })
-            .then(habit => habit.id);
+            .then((habit) => habit.id);
     }
 }

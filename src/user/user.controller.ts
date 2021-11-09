@@ -1,18 +1,15 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
-import { User } from "./user.entity";
+import { Body, Controller, Post } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
+import { CreateUserDto } from "./user.dto";
 import { UserService } from "./user.service";
 
-@Controller('users')
+@ApiTags("users")
+@Controller("users")
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
-    @Get()
-    getUsers() {
-        return this.userService.getAll();
-    }
-
     @Post()
-    createUser(@Body() user: User) {
+    createUser(@Body() user: CreateUserDto) {
         this.userService.create(user);
     }
 }

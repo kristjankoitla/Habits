@@ -1,11 +1,13 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { UserService } from "src/user/user.service";
-import { compareSync } from "bcrypt"
+import { compareSync } from "bcrypt";
 
 @Injectable()
 export class AuthService {
     constructor(
+        // userService should probably not be use here, as authService
+        // is on the same layer as userService, or even lower.
         private userService: UserService,
         private jwtService: JwtService,
     ) {}

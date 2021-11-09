@@ -8,7 +8,7 @@ export class User {
 
     @Column()
     name: string;
-    
+
     @Column()
     // todo maybe unique?
     username: string;

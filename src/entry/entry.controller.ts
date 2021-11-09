@@ -1,14 +1,16 @@
-import { Controller, Delete, Get, Param, Post } from "@nestjs/common";
-import { Entry } from "./entry.entity";
+import { Body, Controller, Delete, Param, Post } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
+import { CreateEntryDto } from "./entry.dto";
 import { EntryService } from "./entry.service";
 
+@ApiTags("entries")
 @Controller("entries")
 export class EntryController {
     constructor(private readonly entryService: EntryService) {}
 
     @Post()
-    createEntry(entry: Entry) {
-        this.entryService.create(entry);
+    createEntry(@Body() createEntryDto: CreateEntryDto) {
+        this.entryService.create(createEntryDto);
     }
 
     @Delete(":entryId")
