@@ -1,5 +1,4 @@
-import { Injectable, Inject } from "@nestjs/common";
-import { User } from "src/user/user.entity";
+import { Inject, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { CreateHabitDto } from "./habit.dto";
 import { Habit } from "./habit.entity";
@@ -9,30 +8,28 @@ export class HabitService {
     constructor(
         @Inject("HABIT_REPOSITORY")
         private habitRepository: Repository<Habit>,
-        @Inject("USER_REPOSITORY")
-        private userRepository: Repository<User>,
     ) {}
 
     getByUserId(userId: number) {
-        // todo fix
+        // todo fix, does not work atm, returns error
         return this.habitRepository.find({ where: { userId: userId } });
     }
 
-    create(createHabitDto: CreateHabitDto) {
-        return this.userRepository
-            .findOne({
-                // there probably shouldn't be a db query if we already know the id of userID
-                where: { id: createHabitDto.userId },
+    async checkExists(userId: number, name: string) {
+        let count = await this.habitRepository
+            .createQueryBuilder("user")
+            .where("habit.userId = :userId AND habit.name = :habitName", {
+                userId: userId,
+                habitName: name,
             })
-            .then((user) => {
-                let habit = new Habit();
-                habit.name = createHabitDto.name;
-                habit.user = user;
-                return habit;
-            })
-            .then((habit) => {
-                return this.habitRepository.save(habit);
-            })
-            .then((habit) => habit.id);
+            .getCount();
+        return count === 0;
+    }
+
+    create(userId: number, createHabitDto: CreateHabitDto) {
+        let habit = new Habit();
+        habit.name = createHabitDto.name;
+        habit.userId = userId;
+        this.habitRepository.save(habit);
     }
 }

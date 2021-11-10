@@ -5,7 +5,6 @@ import { Connection } from "typeorm";
 import { HabitController } from "./habit.controller";
 import { Habit } from "./habit.entity";
 import { HabitService } from "./habit.service";
-import { userProviders } from "src/user/user.module";
 
 const habitProviders = [
     {
@@ -18,6 +17,6 @@ const habitProviders = [
 @Module({
     imports: [DatabaseModule, EntryModule],
     controllers: [HabitController],
-    providers: [...habitProviders, ...userProviders, HabitService],
+    providers: [...habitProviders, HabitService],
 })
 export class HabitModule {}

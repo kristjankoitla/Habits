@@ -15,8 +15,10 @@ export class EntryService {
     }
 
     create(createEntryDto: CreateEntryDto) {
-        // Create entry from dto
-        // this.entryRepository.save(entry);
+        let entry = new Entry();
+        entry.date = createEntryDto.date;
+        entry.habitId = createEntryDto.habitId;
+        this.entryRepository.save(entry);
     }
 
     delete(id: number) {

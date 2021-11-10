@@ -1,12 +1,14 @@
 import {
+    Body,
     Controller,
     Get,
-    Post,
-    Body,
+    HttpException,
+    HttpStatus,
     Param,
-    UseGuards,
-    Request,
     ParseIntPipe,
+    Post,
+    Request,
+    UseGuards,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { JwtAuthGuard } from "src/auth/strategy/jwt-auth.guard";
@@ -33,15 +35,12 @@ export class HabitController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     createHabit(@Request() req, @Body() createHabitDto: CreateHabitDto) {
-        if (req.user.userId !== createHabitDto.userId) {
-            // Handle unauthorized requests like a normal human being and
-            // use exceptions or a dedicated error handler.
-            return "unauthorized";
+        if (
+            this.habitService.checkExists(req.user.userId, createHabitDto.name)
+        ) {
+            throw new HttpException("Duplicate habit", HttpStatus.CONFLICT);
         }
-
-        // Should this even return an id?
-        // Maybe the habit name should be unique (per user).
-        return this.habitService.create(createHabitDto);
+        return this.habitService.create(req.user.userId, createHabitDto);
     }
 
     @Get(":habitId/entries")

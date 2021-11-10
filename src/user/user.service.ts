@@ -12,7 +12,6 @@ export class UserService {
     ) {}
 
     getByUsername(username: string) {
-        // todo findOne currently finds by field which does not have to be unique
         return this.userRepository.findOne({ where: { username: username } });
     }
 

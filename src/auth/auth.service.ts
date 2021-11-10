@@ -1,19 +1,22 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { UserService } from "src/user/user.service";
 import { compareSync } from "bcrypt";
+import { User } from "src/user/user.entity";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class AuthService {
     constructor(
-        // userService should probably not be use here, as authService
-        // is on the same layer as userService, or even lower.
-        private userService: UserService,
+        @Inject("USER_REPOSITORY")
+        private userRepository: Repository<User>,
         private jwtService: JwtService,
     ) {}
 
     async validateUser(username: string, pass: string): Promise<any> {
-        const user = await this.userService.getByUsername(username);
+        const user = await this.userRepository.findOne({
+            where: { username: username },
+        });
+
         if (user && compareSync(pass, user.password)) {
             const { password, ...result } = user;
             return result;

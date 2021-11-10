@@ -1,5 +1,11 @@
 import { Habit } from "src/habit/habit.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from "typeorm";
 
 @Entity({ name: "entry" })
 export class Entry {
@@ -9,6 +15,10 @@ export class Entry {
     @Column()
     date: Date;
 
+    @Column({ type: "int", nullable: false })
+    habitId: number;
+
     @ManyToOne(() => Habit, (habit) => habit.entries, { nullable: false })
+    @JoinColumn({ name: "habitId" })
     habit: Habit;
 }
