@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common";
 import { DatabaseModule } from "src/database/database.module";
-import { EntryModule } from "src/entry/entry.module";
 import { Connection } from "typeorm";
 import { HabitController } from "./habit.controller";
 import { Habit } from "./habit.entity";
@@ -15,7 +14,7 @@ const habitProviders = [
 ];
 
 @Module({
-    imports: [DatabaseModule, EntryModule],
+    imports: [DatabaseModule],
     controllers: [HabitController],
     providers: [...habitProviders, HabitService],
 })

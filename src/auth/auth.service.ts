@@ -1,6 +1,7 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { compareSync } from "bcrypt";
+import { Habit } from "src/habit/habit.entity";
 import { User } from "src/user/user.entity";
 import { Repository } from "typeorm";
 
@@ -9,6 +10,8 @@ export class AuthService {
     constructor(
         @Inject("USER_REPOSITORY")
         private userRepository: Repository<User>,
+        @Inject("HABIT_REPOSITORY")
+        private habitRepository: Repository<Habit>,
         private jwtService: JwtService,
     ) {}
 
@@ -29,5 +32,13 @@ export class AuthService {
         return {
             access_token: this.jwtService.sign(payload),
         };
+    }
+
+    async isAuthorizedForHabit(userId, habitId) {
+        let habit = await this.habitRepository.findOne(habitId);
+        if (habit?.userId === userId) {
+            return true;
+        }
+        return false;
     }
 }

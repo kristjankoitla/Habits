@@ -17,13 +17,20 @@ export class HabitService {
 
     async checkExists(userId: number, name: string) {
         let count = await this.habitRepository
-            .createQueryBuilder("user")
+            .createQueryBuilder("habit")
             .where("habit.userId = :userId AND habit.name = :habitName", {
                 userId: userId,
                 habitName: name,
             })
             .getCount();
-        return count === 0;
+        return count !== 0;
+    }
+
+    async getUserId(habitId: number) {
+        let habit = await this.habitRepository.findOne({
+            where: { id: habitId },
+        });
+        return habit.userId;
     }
 
     create(userId: number, createHabitDto: CreateHabitDto) {

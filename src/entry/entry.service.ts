@@ -11,7 +11,7 @@ export class EntryService {
     ) {}
 
     getByHabitId(habitId: number): Promise<Entry[]> {
-        return this.entryRepository.find({ where: { id: habitId } });
+        return this.entryRepository.find({ where: { habitId: habitId } });
     }
 
     create(createEntryDto: CreateEntryDto) {

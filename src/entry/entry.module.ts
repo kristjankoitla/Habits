@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { AuthModule } from "src/auth/auth.module";
 import { DatabaseModule } from "src/database/database.module";
 import { Connection } from "typeorm";
 import { EntryController } from "./entry.controller";
@@ -14,9 +15,8 @@ const entryProviders = [
 ];
 
 @Module({
-    imports: [DatabaseModule],
+    imports: [DatabaseModule, AuthModule],
     controllers: [EntryController],
     providers: [...entryProviders, EntryService],
-    exports: [EntryService]
 })
 export class EntryModule {}
