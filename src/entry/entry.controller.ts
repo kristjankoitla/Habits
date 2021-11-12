@@ -6,8 +6,9 @@ import {
     HttpException,
     HttpStatus,
     Param,
-    ParseIntPipe,
+    ParseArrayPipe,
     Post,
+    Query,
     Request,
     UseGuards,
 } from "@nestjs/common";
@@ -35,15 +36,18 @@ export class EntryController {
         this.entryService.delete(entryId);
     }
 
-    @Get(":habitId")
+    @Get()
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    async getEntries(@Request() req, @Param("habitId", new ParseIntPipe()) habitId: number) {
-        let isAuthorized = await this.authService.isAuthorizedForHabit(req.user.userId, habitId);
+    async getEntries(
+        @Request() req,
+        @Query("habitId", new ParseArrayPipe({ items: Number })) habitIds: Array<number>,
+    ) {
+        let isAuthorized = await this.authService.isAuthorizedForHabits(req.user.userId, habitIds);
         if (!isAuthorized) {
-            throw new HttpException("Unauthorized for habit", HttpStatus.FORBIDDEN);
+            throw new HttpException("Unauthorized for habit(s)", HttpStatus.FORBIDDEN);
         }
 
-        return this.entryService.getByHabitId(habitId);
+        return this.entryService.getByHabitIds(habitIds);
     }
 }

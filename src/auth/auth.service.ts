@@ -34,11 +34,13 @@ export class AuthService {
         };
     }
 
-    async isAuthorizedForHabit(userId, habitId) {
-        let habit = await this.habitRepository.findOne(habitId);
-        if (habit?.userId === userId) {
-            return true;
+    async isAuthorizedForHabits(userId: number, habitIds: number[]) {
+        let habits = await this.habitRepository.findByIds(habitIds);
+        for (const habit of habits) {
+            if (habit?.userId !== userId) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 }

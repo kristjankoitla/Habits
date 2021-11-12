@@ -10,8 +10,10 @@ export class EntryService {
         private entryRepository: Repository<Entry>,
     ) {}
 
-    getByHabitId(habitId: number): Promise<Entry[]> {
-        return this.entryRepository.find({ where: { habitId: habitId } });
+    getByHabitIds(habitIds: number[]): Promise<Entry[]> {
+        return this.entryRepository.createQueryBuilder("entry")
+            .where("entry.habitId IN (:...habitIds)", { habitIds: habitIds })
+            .getMany();
     }
 
     create(createEntryDto: CreateEntryDto) {

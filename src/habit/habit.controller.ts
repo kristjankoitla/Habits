@@ -29,12 +29,7 @@ export class HabitController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     async createHabit(@Request() req, @Body() createHabitDto: CreateHabitDto) {
-        if (
-            await this.habitService.checkExists(
-                req.user.userId,
-                createHabitDto.name,
-            )
-        ) {
+        if (await this.habitService.checkExists(req.user.userId, createHabitDto.name)) {
             throw new HttpException("Duplicate habit", HttpStatus.CONFLICT);
         }
         return this.habitService.create(req.user.userId, createHabitDto);
