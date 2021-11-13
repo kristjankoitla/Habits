@@ -1,11 +1,5 @@
-import { Habit } from "src/habit/habit.entity";
-import {
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-} from "typeorm";
+import { Habit } from "@src/habit/habit.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "entry" })
 export class Entry {

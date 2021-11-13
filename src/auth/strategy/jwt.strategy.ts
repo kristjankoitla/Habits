@@ -14,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: any) {
-        // todo token revoking
+        // todo: token revoking
         return { userId: payload.sub, username: payload.username };
     }
 }

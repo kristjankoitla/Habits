@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
+import { Habit } from "@src/habit/habit.entity";
+import { User } from "@src/user/user.entity";
 import { compareSync } from "bcrypt";
-import { Habit } from "src/habit/habit.entity";
-import { User } from "src/user/user.entity";
 import { Repository } from "typeorm";
 
 @Injectable()

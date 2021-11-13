@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
-import { DatabaseModule } from "src/database/database.module";
-import { Habit } from "src/habit/habit.entity";
-import { User } from "src/user/user.entity";
+import { DatabaseModule } from "@src/database/database.module";
+import { Habit } from "@src/habit/habit.entity";
+import { User } from "@src/user/user.entity";
 import { Connection } from "typeorm";
 import * as jwtConstants from "../../jwt-constants.json";
 import { AuthController } from "./auth.controller";

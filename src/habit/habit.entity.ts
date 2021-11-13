@@ -1,5 +1,5 @@
-import { Entry } from "src/entry/entry.entity";
-import { User } from "src/user/user.entity";
+import { Entry } from "@src/entry/entry.entity";
+import { User } from "@src/user/user.entity";
 import {
     Column,
     Entity,

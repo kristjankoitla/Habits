@@ -1,4 +1,4 @@
-import { Habit } from "src/habit/habit.entity";
+import { Habit } from "@src/habit/habit.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: "user" })

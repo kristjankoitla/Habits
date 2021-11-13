@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
+import { Connection } from "typeorm";
 import { DatabaseModule } from "../database/database.module";
 import { UserController } from "./user.controller";
-import { UserService } from "./user.service";
-import { Connection } from "typeorm";
 import { User } from "./user.entity";
+import { UserService } from "./user.service";
 
 export const userProviders = [
     {
@@ -17,6 +17,5 @@ export const userProviders = [
     imports: [DatabaseModule],
     controllers: [UserController],
     providers: [...userProviders, UserService],
-    exports: [UserService, ...userProviders],
 })
 export class UserModule {}

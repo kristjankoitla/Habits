@@ -13,8 +13,8 @@ import {
     UseGuards,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { AuthService } from "src/auth/auth.service";
-import { JwtAuthGuard } from "src/auth/strategy/jwt-auth.guard";
+import { AuthService } from "@src/auth/auth.service";
+import { JwtAuthGuard } from "@src/auth/strategy/jwt-auth.guard";
 import { CreateEntryDto } from "./entry.dto";
 import { EntryService } from "./entry.service";
 

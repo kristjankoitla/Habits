@@ -16,7 +16,7 @@ export class UserService {
     }
 
     create(createUserDto: CreateUserDto) {
-        // todo handle unique duplicate errors/cases somehow
+        // todo: handle unique duplicate errors/cases somehow
         let user = new User();
         user.name = createUserDto.name;
         user.username = createUserDto.username;
