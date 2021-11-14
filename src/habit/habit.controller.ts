@@ -9,7 +9,7 @@ import {
     UseGuards,
 } from "@nestjs/common";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { JwtAuthGuard } from "@src/auth/strategy/jwt-auth.guard";
+import { JwtAuthGuard } from "@src/auth/guard/jwt-auth.guard";
 import { CreateHabitDto } from "./habit.dto";
 import { HabitService } from "./habit.service";
 

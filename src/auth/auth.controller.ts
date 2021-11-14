@@ -2,7 +2,7 @@ import { Controller, HttpCode, HttpStatus, Post, Request, UseGuards } from "@nes
 import { ApiBody, ApiTags } from "@nestjs/swagger";
 import { LoginDto } from "./auth.dto";
 import { AuthService } from "./auth.service";
-import { LocalAuthGuard } from "./strategy/local-auth.guard";
+import { LocalAuthGuard } from "./guard/local-auth.guard";
 
 @Controller()
 export class AuthController {
