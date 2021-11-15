@@ -37,5 +37,5 @@ lerna-debug.log*
 # Database config
 ormconfig.json
 
-# JWT config
-jwt-constants.json
+# Session secret
+session-secret.json

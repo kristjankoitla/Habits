@@ -5,11 +5,11 @@ import {
     HttpException,
     HttpStatus,
     Post,
-    Request,
+    Session,
     UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
-import { JwtAuthGuard } from "@src/auth/guard/jwt-auth.guard";
+import { ApiTags } from "@nestjs/swagger";
+import { LoggedInGuard } from "@src/auth/guard/logged-in.guard";
 import { CreateHabitDto } from "./habit.dto";
 import { HabitService } from "./habit.service";
 
@@ -19,19 +19,17 @@ export class HabitController {
     constructor(private readonly habitService: HabitService) {}
 
     @Get()
-    @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    getHabits(@Request() req) {
-        return this.habitService.getByUserId(req.user.userId);
+    @UseGuards(LoggedInGuard)
+    getHabits(@Session() session) {
+        return this.habitService.getByUserId(session.passport.user);
     }
 
     @Post()
-    @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
-    async createHabit(@Request() req, @Body() createHabitDto: CreateHabitDto) {
-        if (await this.habitService.checkExists(req.user.userId, createHabitDto.name)) {
+    @UseGuards(LoggedInGuard)
+    async createHabit(@Session() session, @Body() createHabitDto: CreateHabitDto) {
+        if (await this.habitService.checkExists(session.passport.user, createHabitDto.name)) {
             throw new HttpException("Duplicate habit", HttpStatus.CONFLICT);
         }
-        return this.habitService.create(req.user.userId, createHabitDto);
+        return this.habitService.create(session.passport.user, createHabitDto);
     }
 }

@@ -9,12 +9,12 @@ import {
     ParseArrayPipe,
     Post,
     Query,
-    Request,
+    Session,
     UseGuards,
 } from "@nestjs/common";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiTags } from "@nestjs/swagger";
 import { AuthService } from "@src/auth/auth.service";
-import { JwtAuthGuard } from "@src/auth/guard/jwt-auth.guard";
+import { LoggedInGuard } from "@src/auth/guard/logged-in.guard";
 import { CreateEntryDto } from "./entry.dto";
 import { EntryService } from "./entry.service";
 
@@ -27,6 +27,7 @@ export class EntryController {
     ) {}
 
     @Post()
+    @UseGuards(LoggedInGuard)
     createEntry(@Body() createEntryDto: CreateEntryDto) {
         this.entryService.create(createEntryDto);
     }
@@ -37,13 +38,15 @@ export class EntryController {
     }
 
     @Get()
-    @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(LoggedInGuard)
     async getEntries(
-        @Request() req,
+        @Session() session,
         @Query("habitId", new ParseArrayPipe({ items: Number })) habitIds: Array<number>,
     ) {
-        let isAuthorized = await this.authService.isAuthorizedForHabits(req.user.userId, habitIds);
+        let isAuthorized = await this.authService.isAuthorizedForHabits(
+            session.passport.user,
+            habitIds,
+        );
         if (!isAuthorized) {
             throw new HttpException("Unauthorized for habit(s)", HttpStatus.FORBIDDEN);
         }
