@@ -1,11 +1,9 @@
 import {
     Body,
     Controller,
-    Delete,
     Get,
     HttpException,
     HttpStatus,
-    Param,
     ParseArrayPipe,
     Post,
     Query,
@@ -28,14 +26,22 @@ export class EntryController {
 
     @Post()
     @UseGuards(LoggedInGuard)
-    createEntry(@Body() createEntryDto: CreateEntryDto) {
+    async createEntry(@Session() session, @Body() createEntryDto: CreateEntryDto) {
+        let isAuthorized = await this.authService.isAuthorizedForHabits(session.passport.user, [
+            createEntryDto.habitId,
+        ]);
+        if (!isAuthorized) {
+            throw new HttpException("Unauthorized for habit", HttpStatus.FORBIDDEN);
+        }
+
         this.entryService.create(createEntryDto);
     }
 
-    @Delete(":entryId")
-    deleteEntry(@Param("entryId") entryId: number) {
-        this.entryService.delete(entryId);
-    }
+    // todo: figure out how to reasonably get the user of entry
+    // @Delete(":entryId")
+    // deleteEntry(@Param("entryId") entryId: number) {
+    //     this.entryService.delete(entryId);
+    // }
 
     @Get()
     @UseGuards(LoggedInGuard)
