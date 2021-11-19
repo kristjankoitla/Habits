@@ -5,7 +5,7 @@ import { AuthModule } from "./auth/auth.module";
 import { EntryModule } from "./entry/entry.module";
 import { HabitModule } from "./habit/habit.module";
 import { UserModule } from "./user/user.module";
-import { secret } from "session-secret.json";
+import { secret } from "@/session-secret.json";
 
 @Module({
     imports: [AuthModule, UserModule, HabitModule, EntryModule],
