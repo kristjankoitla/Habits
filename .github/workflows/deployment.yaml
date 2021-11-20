@@ -15,11 +15,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Setup config files
+        run: echo '${{ secrets.SESSION_SECRET }}' > session-secret.json; echo '${{ secrets.ORMCONFIG }}' > ormconfig.json
+
       - name: Build application
         run: npm run build
 
       - name: Run migrations
         run: npm run migrate
 
-      - name: Start application
-        run: npm
+      - name: (Re)start application
+        run: npm run restart
