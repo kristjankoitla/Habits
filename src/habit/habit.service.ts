@@ -39,4 +39,8 @@ export class HabitService {
         habit.userId = userId;
         this.habitRepository.save(habit);
     }
+
+    delete(habitId: number) {
+        this.habitRepository.delete(habitId);
+    }
 }

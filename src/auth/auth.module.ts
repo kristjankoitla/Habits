@@ -9,6 +9,7 @@ import { AuthService } from "./auth.service";
 import { AuthSerializer } from "./serialization.provider";
 import { LocalStrategy } from "./strategy/local.strategy";
 
+// todo: I probably shouldn't declare the same things all over the project, right?
 const authProviders = [
     {
         provide: "USER_REPOSITORY",
@@ -31,6 +32,6 @@ const authProviders = [
     ],
     controllers: [AuthController],
     providers: [AuthService, AuthSerializer, LocalStrategy, ...authProviders],
-    exports: [AuthService],
+    exports: [AuthService, ...authProviders],
 })
 export class AuthModule {}

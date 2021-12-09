@@ -1,4 +1,4 @@
-import { Injectable, Inject } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { CreateEntryDto } from "./entry.dto";
 import { Entry } from "./entry.entity";
@@ -10,16 +10,14 @@ export class EntryService {
         private entryRepository: Repository<Entry>,
     ) {}
 
-    getByHabitIds(habitIds: number[]): Promise<Entry[]> {
-        return this.entryRepository.createQueryBuilder("entry")
-            .where("entry.habitId IN (:...habitIds)", { habitIds: habitIds })
-            .getMany();
+    getByHabit(habitId: number) {
+        return this.entryRepository.find({ where: { habitId: habitId } });
     }
 
-    create(createEntryDto: CreateEntryDto) {
+    create(habitId: number, createEntryDto: CreateEntryDto) {
         let entry = new Entry();
         entry.date = createEntryDto.date;
-        entry.habitId = createEntryDto.habitId;
+        entry.habitId = habitId;
         this.entryRepository.save(entry);
     }
 
