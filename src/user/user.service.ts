@@ -1,8 +1,8 @@
-import { Injectable, Inject } from "@nestjs/common";
-import { Repository } from "typeorm";
-import { User } from "./user.entity";
+import { Inject, Injectable, MethodNotAllowedException } from "@nestjs/common";
 import { hashSync } from "bcrypt";
+import { Repository } from "typeorm";
 import { CreateUserDto } from "./user.dto";
+import { User } from "./user.entity";
 
 @Injectable()
 export class UserService {
@@ -15,13 +15,12 @@ export class UserService {
         return this.userRepository.findOne({ where: { username: username } });
     }
 
-    create(createUserDto: CreateUserDto) {
-        // todo: handle unique duplicate errors/cases somehow
+    async create(createUserDto: CreateUserDto) {
         let user = new User();
         user.name = createUserDto.name;
         user.username = createUserDto.username;
         user.password = hashSync(createUserDto.password, 10);
 
-        this.userRepository.save(user);
+        await this.userRepository.save(user);
     }
 }
