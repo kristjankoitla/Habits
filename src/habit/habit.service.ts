@@ -11,7 +11,6 @@ export class HabitService {
     ) {}
 
     getByUserId(userId: number) {
-        // todo: fix, does not work atm, returns error
         return this.habitRepository.find({ where: { userId: userId } });
     }
 

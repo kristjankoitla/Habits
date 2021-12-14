@@ -39,7 +39,6 @@ export class HabitController {
     @Delete(":habitId")
     @UseGuards(GenericGuard)
     deleteHabit(@Param("habitId") habitId: number) {
-        // todo: add not found response
         return this.habitService.delete(habitId);
     }
 }
